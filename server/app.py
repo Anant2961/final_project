@@ -25,7 +25,16 @@ app.config['UPLOAD_FOLDER_DECRYPT'] = UPLOAD_FOLDER_DECRYPT
 
 @app.route('/upload/encrypt', methods=['POST'])
 def upload_file():
-    # temp_dir = '/home/anant2961/final_project/server/'
+    text = request.form.get('text')
+    print(text)
+    file_path = '/home/anant2961/final_project/server/secret.txt'
+    try:
+        with open(file_path, 'w') as file:
+            file.write(text)
+            file.close()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 200
+
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
 
@@ -99,7 +108,8 @@ def decrypt():
 def encrypt():
     # print(session.get('temp_path'))
     name = request.json['filename']
-    input_image_path = '/home/anant2961/final_project/server/uploads/encrypt/'+name
+    original_path = os.path.abspath(name)
+    # input_image_path = '/home/anant2961/final_project/server/uploads/encrypt/'+name
     # print(final_path)
     output_image_path = '/home/anant2961/final_project/client/crypt/public/output_image.png'
     secret_text = 'secret.txt'
@@ -128,14 +138,14 @@ def download_image(image_path):
     return response
 
 
-@app.route('/hello')
-def hello_world():
-    return jsonify({'message': 'Hello, World!'})
+# @app.route('/hello')
+# def hello_world():
+#     return jsonify({'message': 'Hello, World!'})
 
 
-@app.route('/')
-def help():
-    return jsonify({'message': 'hii'})
+# @app.route('/')
+# def help():
+#     return jsonify({'message': 'hii'})
 
 
 if __name__ == '__main__':

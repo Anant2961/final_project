@@ -16,19 +16,19 @@ from getpass import getpass
 
 
 def encrypt_data(data, public_key):
-    session_key = os.urandom(32) 
+    session_key = os.urandom(32)
 
-    salt = os.urandom(16)  
+    salt = os.urandom(16)
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
         salt=salt,
-        iterations=200000,  
+        iterations=200000,
         backend=default_backend()
     )
     key = kdf.derive(session_key)
 
-    iv = os.urandom(16) 
+    iv = os.urandom(16)
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv),
                     backend=default_backend())
     encryptor = cipher.encryptor()
@@ -44,7 +44,7 @@ def encrypt_data(data, public_key):
             label=None
         )
     )
-
+    print(encrypted_data)
     return encrypted_session_key, salt, iv, encrypted_data
 
 
@@ -62,7 +62,7 @@ def decrypt_data(encrypted_session_key, salt, iv, encrypted_data, private_key):
         algorithm=hashes.SHA256(),
         length=32,
         salt=salt,
-        iterations=200000, 
+        iterations=200000,
         backend=default_backend()
     )
     key = kdf.derive(session_key)
@@ -290,7 +290,7 @@ def extract_file_from_png(image_path, output_file_path, private_key_path):
 
     # Check if the file already exists and prompt the user
     if os.path.exists(output_file_path):
-        overwrite = 'y' 
+        overwrite = 'y'
         if overwrite != 'y':
             print("Extraction cancelled.")
             return

@@ -5,14 +5,41 @@ import Decrypt from "./components/Decrypt";
 import axios from "axios";
 
 function App() {
-  // const cors = require("cors");
-  // App.use(cors());
   const [selectedPage, setSelectedPage] = useState("encrypt");
   return (
     <>
-      <div>
-        <button onClick={() => setSelectedPage("encrypt")}>Encrypt</button>
-        <button onClick={() => setSelectedPage("decrypt")}>Decrypt</button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "10vh",
+          backgroundColor: "black",
+          color: "white",
+        }}
+      >
+        <button
+          style={{
+            padding: "10px",
+            margin: "10px",
+            color: "white",
+            backgroundColor: "purple",
+          }}
+          onClick={() => setSelectedPage("encrypt")}
+        >
+          Encrypt
+        </button>
+        <button
+          style={{
+            padding: "10px",
+            margin: "10px",
+            color: "white",
+            backgroundColor: "purple",
+          }}
+          onClick={() => setSelectedPage("decrypt")}
+        >
+          Decrypt
+        </button>
       </div>
       <div>
         {selectedPage === "encrypt" && <Encrypt />}

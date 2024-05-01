@@ -19,6 +19,8 @@ def encrypt_data(data, public_key):
     session_key = os.urandom(32)
 
     salt = os.urandom(16)
+    print(salt.hex())
+    print(session_key.hex())
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
@@ -44,7 +46,7 @@ def encrypt_data(data, public_key):
             label=None
         )
     )
-
+    print(encrypted_data.hex())
     return encrypted_session_key, salt, iv, encrypted_data
 
 
@@ -80,7 +82,7 @@ def decrypt_data(encrypted_session_key, salt, iv, encrypted_data, private_key):
 
 
 def compute_seed_from_image_dimensions(image_path):
-    print(image_path)
+    # print(image_path)
     with Image.open(image_path) as img:
         width, height = img.size
     return width + height

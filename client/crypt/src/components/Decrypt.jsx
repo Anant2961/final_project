@@ -50,7 +50,7 @@ const Decrypt = () => {
   return (
     <>
       <div className="header">
-        <h1>CipherCanvas</h1>
+        <h1>CipherCanvas Decrypt</h1>
       </div>
       <div className="container">
         <div className="input-box">
@@ -73,11 +73,11 @@ const Decrypt = () => {
           <button id="upload-btn" onClick={handlefileupload}>
             Upload Image
           </button>
+          <FileDownloader type={1} filename={filename} />
         </div>
         <div className="output-box">
           <textarea id="plain-text" placeholder="ENCRYPTED TEXT"></textarea>
         </div>
-        <FileDownloader type={1} filename={filename} />
       </div>
       {/* <div className="wrapper">
         <form>
