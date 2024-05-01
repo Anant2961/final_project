@@ -18,6 +18,7 @@ const Encrypt = () => {
     setSelectedImage(e.target.files[0]);
     console.log(e.target.files[0]);
   };
+
   const handlefileupload = async () => {
     const formdata = new FormData();
     const text = document.getElementById("plain-text").value;
@@ -42,6 +43,7 @@ const Encrypt = () => {
       console.error("error uploading file", error);
     }
   };
+
   const upload = async () => {
     setloader(true);
     console.log(filename);
@@ -51,12 +53,14 @@ const Encrypt = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        // mode: "no-cors",
         body: JSON.stringify({ filename }),
       });
-
       if (!response.ok) {
         throw new Error("Failed to download file");
       }
+      const data = await Response.json();
+      console.log(data);
     } catch (error) {
       console.error("Error downloading file:", error);
     } finally {

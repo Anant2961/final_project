@@ -46,7 +46,11 @@ def encrypt_data(data, public_key):
             label=None
         )
     )
-    print(encrypted_data.hex())
+    text = (encrypted_data.hex())
+    file_path = "/home/anant2961/final_project/client/crypt/public/encry.txt"
+    with open(file_path, 'w') as file:
+        file.write(text)
+        file.close()
     return encrypted_session_key, salt, iv, encrypted_data
 
 

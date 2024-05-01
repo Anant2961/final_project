@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, send_file, session
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 import os
 import codecs
@@ -7,9 +7,10 @@ import subprocess
 import secret_pixel
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
-app.secret_key = "super secret key"
 
+CORS(app, supports_credentials=True)
+app.config['CORS_HEADERS'] = 'Content-Type'
+app.secret_key = "super secret key"
 
 UPLOAD_FOLDER = 'uploads/encrypt'
 UPLOAD_FOLDER_DECRYPT = 'uploads/decrypt'
@@ -52,10 +53,10 @@ def upload_file():
         print(file_path)
         # session['temp_path'] = filename
         # app.config['final_path'] = 'home/anant2961/final_project/server/' + temp_path
-        print("###")
-        print("")
-        print("")
-        print("###")
+        # print("###")
+        # print("")
+        # print("")
+        # print("###")
         # print(final_path)
         return jsonify({'file_path': filename}), 200
     return jsonify({'error': 'Something went wrong'}), 500
@@ -108,44 +109,41 @@ def decrypt():
 def encrypt():
     # print(session.get('temp_path'))
     name = request.json['filename']
+    print("hehe")
+    print(name)
     original_path = os.path.abspath(name)
-    # input_image_path = '/home/anant2961/final_project/server/uploads/encrypt/'+name
+    print(original_path)
+    input_image_path = "/home/anant2961/final_project/server/uploads/encrypt/"+name
     # print(final_path)
-    output_image_path = '/home/anant2961/final_project/client/crypt/public/output_image.png'
-    secret_text = 'secret.txt'
-    print(input_image_path, "###")
+    output_image_path = "/home/anant2961/final_project/client/crypt/public/output_image.png"
+    secret_text = "secret.txt"
+    print(input_image_path, "-hehe")
     # return jsonify({'error': 'Failed to encrypt data'}), 500
     command = ['python3', 'secret_pixel.py', 'hide', input_image_path,
                secret_text, 'mypublickey.pem', output_image_path]
+    cipher_value = ''
+    cipher_text_filepath = "/home/anant2961/final_project/client/crypt/public/encry.txt"
     try:
         subprocess.run(command, check=True)
+        with open(cipher_text_filepath, 'r') as file:
+            cipher_value = file.read()
+            file.close()
+        print(cipher_value)
         # return jsonify({'message': 'Data encrypted successfully'}), 200
     except subprocess.CalledProcessError as e:
-        # return jsonify({'error': f'Failed to encrypt data: {e}'}), 500
+        return jsonify({'error': f'Failed to encrypt data: {e}'}), 500
         pass
     return jsonify({'message': 'Data encrypted successfully'}), 200
 
 
-def download_image(image_path):
-    if not os.path.exists(image_path):
-        return jsonify({'error': 'Image not found'}), 404
-    # filename = 'outputfinal_image.png'
-    # return send_file(filename_or_fp="/home/anant2961/final_project/server/"+image_path, as_attachment=True)
-    file_data = codecs.open(image_path, 'rb').read()
-    response = make_response()
-    response.headers['my-custom-header'] = 'my-custom-status-0'
-    response.data = file_data
-    return response
+@app.route('/hello')
+def hello_world():
+    return jsonify({'message': 'Hello, World!'})
 
 
-# @app.route('/hello')
-# def hello_world():
-#     return jsonify({'message': 'Hello, World!'})
-
-
-# @app.route('/')
-# def help():
-#     return jsonify({'message': 'hii'})
+@app.route('/')
+def help():
+    return jsonify({'message': 'hii'})
 
 
 if __name__ == '__main__':
