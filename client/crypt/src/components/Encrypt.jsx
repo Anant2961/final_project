@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import "../style.css";
 import axios from "axios";
@@ -8,6 +8,7 @@ import Rolling from "/Rolling.svg";
 const Encrypt = () => {
   const [first, setfirst] = useState("");
   const [loader, setloader] = useState(false);
+  const [ciphervalue, setCiphervalue] = useState(" ");
   const handletextchange = (e) => {
     setfirst(e.target.value);
     console.log(e.target.value);
@@ -43,7 +44,6 @@ const Encrypt = () => {
       console.error("error uploading file", error);
     }
   };
-
   const upload = async () => {
     setloader(true);
     console.log(filename);
@@ -67,6 +67,20 @@ const Encrypt = () => {
       setTimeout(() => {
         setloader(false);
       }, 5000);
+      const cipherdata = async () => {
+        try {
+          const response = await fetch("/encry.txt");
+          if (!response.ok) {
+            throw new Error("Failed to download file");
+          }
+          const data = await response.text();
+          setCiphervalue(data);
+          console.log(data);
+        } catch (error) {
+          console.error("Error downloading file:", error);
+        }
+      };
+      cipherdata();
     }
   };
   return (
@@ -103,7 +117,11 @@ const Encrypt = () => {
           <FileDownloader type={0} filename={filename} />
         </div>
         <div className="output-box">
-          <textarea id="plain-text" placeholder="ENCRYPTED TEXT"></textarea>
+          <textarea
+            id="plain-text"
+            placeholder="ENCRYPTED TEXT"
+            value={ciphervalue}
+          ></textarea>
         </div>
       </div>
       {/* <div className="wrapper">
