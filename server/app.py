@@ -95,7 +95,7 @@ def upload_file_decrypt():
 def decrypt():
     name = request.json['filename']
     input_image_path = '/home/anant2961/final_project/server/uploads/decrypt/'+name
-    output_text_path = 'home/anant2961/final_project/client/crypt/public/extracted.txt'
+    output_text_path = '/home/anant2961/final_project/client/crypt/public/extracted.txt'
     command = ['python3', 'secret_pixel.py', 'extract',
                input_image_path, 'myprivatekey.pem', output_text_path]
     try:
